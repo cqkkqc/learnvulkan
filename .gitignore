@@ -1,6 +1,7 @@
 **/a.out
 build
 build/**
+.cache
 .vscode
 **/.env
 **/.obj

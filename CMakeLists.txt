@@ -16,7 +16,7 @@ if (CMAKE_GENERATOR STREQUAL "MinGW Makefiles")
 endif()
 project(${NAME} VERSION 0.23.0)
 
-
+add_compile_options(-g -O0) 
 # 1. Set VULKAN_SDK_PATH in .env.cmake to target specific vulkan version
 if (DEFINED VULKAN_SDK_PATH)
   set(Vulkan_INCLUDE_DIRS "${VULKAN_SDK_PATH}/Include") # 1.1 Make sure this include path is correct
