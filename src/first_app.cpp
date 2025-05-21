@@ -7,6 +7,7 @@
 namespace lve {
 
 FirstApp::FirstApp() {
+  loadModels();
   createPipelineLayout();
   createPipeline();
   createCommandBuffers();
@@ -23,6 +24,11 @@ void FirstApp::run() {
   }
 
   vkDeviceWaitIdle(lveDevice.device());
+}
+void FirstApp::loadModels() {
+  std::vector<LveModel::Vertex> vertices{
+      {{0.0f, -0.5f}}, {{0.5f, 0.5f}}, {{-0.5f, 0.1f}}};
+  lveModel = std::make_unique<LveModel>(lveDevice, vertices);
 }
 
 void FirstApp::createPipelineLayout() {
@@ -45,8 +51,8 @@ void FirstApp::createPipeline() {
   pipelineConfig.renderPass = lveSwapChain.getRenderPass();
   pipelineConfig.pipelineLayout = pipelineLayout;
   lvePipeline = std::make_unique<LvePipeline>(
-      lveDevice, "shaders/simple_shader_vert.spv",
-      "shaders/simple_shader_frag.spv", pipelineConfig);
+      lveDevice, "shaders/simple_shader.vert.spv",
+      "shaders/simple_shader.frag.spv", pipelineConfig);
 }
 
 void FirstApp::createCommandBuffers() {
@@ -89,6 +95,8 @@ void FirstApp::createCommandBuffers() {
                          VK_SUBPASS_CONTENTS_INLINE);
 
     lvePipeline->bind(commandBuffers[i]);
+    lveModel->bind(commandBuffers[i]);
+    lveModel->draw(commandBuffers[i]);
     vkCmdDraw(commandBuffers[i], 3, 1, 0, 0);
 
     vkCmdEndRenderPass(commandBuffers[i]);
